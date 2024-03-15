@@ -7,7 +7,7 @@ from openai import OpenAI
 # Initialize API clients with secrets
 openai_client = OpenAI(api_key=st.secrets["general"]["openai_key"])
 assemblyai_api_key = st.secrets["api_keys"]["assemblyai"]
-assemblyai_client = AAI_Client(assemblyai_api_key)
+assemblyai_client = AAI_Client(api_key=assemblyai_api_key)
 
 # Streamlit interface
 st.title("Audio Transcription and Summary Generator")
