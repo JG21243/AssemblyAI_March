@@ -33,7 +33,7 @@ import streamlit as st
 
 openai_key = st.secrets["general"]["openai_key"]
 
-assemblyai_key = st.secrets[""]["assemblyai_key"]
+assemblyai_key = st.secrets["assemblyai"]["key"]
 client = OpenAI
 
 # Set API keys for AssemblyAI and OpenAI
