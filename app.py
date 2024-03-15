@@ -6,8 +6,8 @@ from openai import OpenAI
 
 # Initialize API clients with secrets
 openai_client = OpenAI(api_key=st.secrets["general"]["openai_key"])
-
 assemblyai_api_key = st.secrets["api_keys"]["assemblyai"]
+assemblyai_client = AAI_Client(assemblyai_api_key)
 
 # Streamlit interface
 st.title("Audio Transcription and Summary Generator")
@@ -25,6 +25,7 @@ if uploaded_file is not None:
     
     # Transcribe audio file
     transcript_result = assemblyai_client.transcribe(filename=tfile_path)
+    
     # Poll for result or use webhooks in a real application
     transcript = transcript_result.get('text')
     st.subheader("Transcript")
@@ -38,16 +39,6 @@ if uploaded_file is not None:
     
     if user_question:
         st.write("Generating answer...")
-        
-        # Simplified example to generate an answer (this part needs actual implementation)
-        # assistant_answer = generate_answer_with_openai(transcript, user_question, openai_client)
-        # st.subheader("Assistant's Answer")
-        # st.write(assistant_answer)
-
-
-
-    
-   
         
         # Generate answer
         def generate_answer(context_data, user_question):
