@@ -1,18 +1,12 @@
-# Import necessary libraries
 import tempfile
 import os
 import streamlit as st
-import streamlit as st
-import assemblyai as aai
+from assemblyai import Client as AAI_Client
 from openai import OpenAI
-import streamlit as st
 
-openai_key = st.secrets["general"]["openai_key"]
-
-assemblyai_key = st.secrets["assemblyai"]["key"]
-client = OpenAI
-
-# Set API keys for AssemblyAI and OpenAI
+# Initialize API clients with secrets
+openai_client = OpenAI(api_key=st.secrets["general"]["openai_key"])
+assemblyai_client = AAI_Client(st.secrets["assemblyai"]["key"])
 
 # Streamlit interface
 st.title("Audio Transcription and Summary Generator")
@@ -24,27 +18,35 @@ if uploaded_file is not None:
     st.write("File successfully uploaded. Transcribing...")
     
     # Create a temporary file and write the uploaded file's bytes to it
-    tfile = tempfile.NamedTemporaryFile(delete=False)
-    tfile.write(uploaded_file.read())
+    with tempfile.NamedTemporaryFile(delete=False) as tfile:
+        tfile.write(uploaded_file.read())
+        tfile_path = tfile.name
     
     # Transcribe audio file
-    transcriber = aai.Transcriber()
-    transcript = transcriber.transcribe(tfile.name)
-    context = transcript.text
-    print(transcript.text)
-
-    # Remove the temporary file
-    os.unlink(tfile.name)
-
-    # Display transcript
+    transcript_result = assemblyai_client.transcribe(filename=tfile_path)
+    # Poll for result or use webhooks in a real application
+    transcript = transcript_result.get('text')
     st.subheader("Transcript")
-    st.write(context)
+    st.write(transcript)
+
+    # Clean up the temporary file
+    os.unlink(tfile_path)
 
     # User input for question
     user_question = st.text_input("Enter your question:")
     
     if user_question:
         st.write("Generating answer...")
+        
+        # Simplified example to generate an answer (this part needs actual implementation)
+        # assistant_answer = generate_answer_with_openai(transcript, user_question, openai_client)
+        # st.subheader("Assistant's Answer")
+        # st.write(assistant_answer)
+
+
+
+    
+   
         
         # Generate answer
         def generate_answer(context_data, user_question):
