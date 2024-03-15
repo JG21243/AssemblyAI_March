@@ -2,11 +2,17 @@ import tempfile
 import os
 import streamlit as st
 import assemblyai as aai
-from openai import OpenAI
+from langchain.llms import OpenAI
 
 # Access the AssemblyAI API key from Streamlit secrets
 assemblyai_api_key = st.secrets["assemblyai_api_key"]
-openai_client = OpenAI(api_key=st.secrets["openai_key"])
+
+# Create AssemblyAI settings object with the API key
+aai.settings.api_key = assemblyai_api_key
+
+# Access the OpenAI API key from Streamlit secrets
+openai_api_key = st.secrets["openai_key"]
+openai_client = OpenAI(openai_api_key=openai_api_key)
 
 # Streamlit interface
 st.title("Audio Transcription and Summary Generator")
@@ -25,10 +31,9 @@ if uploaded_file is not None:
     
     # Transcribe audio file
     transcript = transcriber.transcribe(filename=tfile_path)
-
     
     # Poll for result or use webhooks in a real application
-    context = ttranscript.text
+    context = transcript.text
     st.subheader("Transcript")
     st.write(transcript.text)
 
@@ -44,8 +49,7 @@ if uploaded_file is not None:
         # Generate answer
         def generate_answer(context_data, user_question):
             try:
-                response = client.chat.completions.create(model="gpt-4",
-                messages=[
+                response = openai_client([
                     {
                         "role": "system",
                         "content": "You are a friendly research assistant. Your task is to use the provided context (an AI transcription of a user-uploaded audio file) to answer the user's questions accurately in an organized, concise, readable format. Always use markdown syntax like **bold** to improve readability."
@@ -58,12 +62,8 @@ if uploaded_file is not None:
                         "role": "user",
                         "content": user_question
                     }
-                ],
-                max_tokens=5000,
-                n=1,
-                stop=None,
-                temperature=0.0)
-                return response['choices'][0]['message']['content'].strip()
+                ])
+                return response.content.strip()
             except Exception as e:
                 return str(e)
         
