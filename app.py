@@ -5,9 +5,8 @@ import assemblyai as aai
 from openai import OpenAI
 
 
-# Initialize AssemblyAI client
-assemblyai_api_key = st.secrets["api_keys"]["assemblyai"]
-assemblyai_settings = Settings(api_key=assemblyai_api_key)
+# Access the AssemblyAI API key from Streamlit secrets
+assemblyai_api_key = st.secrets["assemblyai_api_key"]
 
 
 # Initialize API clients with secrets
