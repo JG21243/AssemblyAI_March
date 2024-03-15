@@ -10,7 +10,7 @@ assemblyai_api_key = st.secrets["assemblyai_api_key"]
 
 
 # Initialize API clients with secrets
-openai_client = OpenAI(api_key=st.secrets["general"]["openai_key"])
+openai_client = OpenAI(api_key=st.secrets["openai_key"])
 
 
 # Streamlit interface
