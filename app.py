@@ -2,7 +2,7 @@ import tempfile
 import os
 import streamlit as st
 import assemblyai as aai
-from langchain.llms import OpenAI
+from langchain_community.llms import OpenAI
 
 # Access the AssemblyAI API key from Streamlit secrets
 assemblyai_api_key = st.secrets["assemblyai_api_key"]
