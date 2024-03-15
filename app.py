@@ -30,8 +30,8 @@ if uploaded_file is not None:
         tfile_path = tfile.name
     
     # Transcribe audio file
-    transcript = transcriber.transcribe(filename=tfile_path)
-    
+    transcript = transcriber.transcribe(tfile_path)  # Pass file path as a positional argument
+
     # Poll for result or use webhooks in a real application
     context = transcript.text
     st.subheader("Transcript")
