@@ -3,11 +3,16 @@ import os
 import streamlit as st
 from assemblyai import Client as AAI_Client
 from openai import OpenAI
+from assemblyai import Settings
+
+# Initialize AssemblyAI client
+assemblyai_api_key = st.secrets["api_keys"]["assemblyai"]
+assemblyai_settings = Settings(api_key=assemblyai_api_key)
+assemblyai_client = AAI_Client(settings=assemblyai_settings)
 
 # Initialize API clients with secrets
 openai_client = OpenAI(api_key=st.secrets["general"]["openai_key"])
-assemblyai_api_key = st.secrets["api_keys"]["assemblyai"]
-assemblyai_client = AAI_Client()
+
 
 # Streamlit interface
 st.title("Audio Transcription and Summary Generator")
