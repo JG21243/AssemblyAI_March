@@ -4,14 +4,9 @@ import streamlit as st
 import assemblyai as aai
 from openai import OpenAI
 
-
 # Access the AssemblyAI API key from Streamlit secrets
 assemblyai_api_key = st.secrets["assemblyai_api_key"]
-
-
-# Initialize API clients with secrets
 openai_client = OpenAI(api_key=st.secrets["openai_key"])
-
 
 # Streamlit interface
 st.title("Audio Transcription and Summary Generator")
@@ -23,17 +18,19 @@ if uploaded_file is not None:
     st.write("File successfully uploaded. Transcribing...")
     
     # Create a temporary file and write the uploaded file's bytes to it
+    transcriber = aai.Transcriber()
     with tempfile.NamedTemporaryFile(delete=False) as tfile:
         tfile.write(uploaded_file.read())
         tfile_path = tfile.name
     
     # Transcribe audio file
-    transcript_result = assemblyai_client.transcribe(filename=tfile_path)
+    transcript = transcriber.transcribe(filename=tfile_path)
+
     
     # Poll for result or use webhooks in a real application
-    transcript = transcript_result.get('text')
+    context = ttranscript.text
     st.subheader("Transcript")
-    st.write(transcript)
+    st.write(transcript.text)
 
     # Clean up the temporary file
     os.unlink(tfile_path)
