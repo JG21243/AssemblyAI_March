@@ -2,3 +2,7 @@ streamlit
 assemblyai
 openai
 langchain
+langchain-commmunity
+langchain-openai
+langchain_core
+
