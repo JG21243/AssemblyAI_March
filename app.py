@@ -71,8 +71,8 @@ def generate_answer(chat, context, question):
             HumanMessage(content=f"Here is the context: {context}"),
             HumanMessage(content=question)
         ]
-        response = chat.generate(messages)
-        return response.generations[0][0].text.strip()
+        response = chat(messages)
+        return response.content
     except Exception as e:
         return str(e)
 
