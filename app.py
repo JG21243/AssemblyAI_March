@@ -8,6 +8,11 @@ from langchain.prompts.chat import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
+from langchain.schema import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage
+)
 
 def main():
     # Access the AssemblyAI API key from Streamlit secrets
@@ -61,10 +66,16 @@ def generate_answer(chat, context, question):
     chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
 
     try:
-        response = chat(chat_prompt.format_prompt(question=question, context=context).to_messages())
-        return response.content
+        messages = [
+            SystemMessage(content=system_template),
+            HumanMessage(content=f"Here is the context: {context}"),
+            HumanMessage(content=question)
+        ]
+        response = chat.generate(messages)
+        return response.generations[0][0].text.strip()
     except Exception as e:
         return str(e)
 
 if __name__ == "__main__":
     main()
+ 
